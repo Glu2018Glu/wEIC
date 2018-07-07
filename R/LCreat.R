@@ -23,7 +23,7 @@ LCreat <- function(DNalis,InL=1000,StT=0,EnT=1000000000000,MSn=1) {
   require(mzR);require(msdata);
   mzOb<-list()
   DPa<-getwd()
-
+#sadf
   for (jj in 1 : length(DNalis)) {
     DNa<-DNalis[jj]
   file<-list.files(DPa,pattern =DNa,full.names = TRUE,recursive =FALSE);
