@@ -1,7 +1,7 @@
 Package: wEIC
 Type: Package
 Title: R package for extract EIC from mzXML
-Version: 0.1.0
+Version: 0.2.0
 Author: wxb
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
