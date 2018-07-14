@@ -20,7 +20,7 @@
 #   Test Package:              'Ctrl + Shift + T'
 #,backend = "Ramp"
 LCreat <- function(DNalis,InL,StT,EnT,MSn=1) {
-  require(mzR);require(msdata);
+  require(mzR);
   if (missing(DNalis)) {DNalis<-list.files(getwd(),pattern="mzXML")} else {}
   mzOb<-list()
   DPa<-getwd()
