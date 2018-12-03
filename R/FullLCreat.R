@@ -20,7 +20,7 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 #,backend = "Ramp"
-FullLCreatplus <- function(DNalis=NULL,InL,MSn=1) {
+FullLCreat <- function(DNalis=NULL,InL,MSn=1) {
   require(mzR);
   if (missing(DNalis)) {DNalis<-list.files(getwd(),pattern="mzXML")} else {}
   mzOb<-list()
