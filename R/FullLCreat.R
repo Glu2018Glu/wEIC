@@ -1,5 +1,5 @@
 # @title
-#LCreat
+#FullLCreatPlus
 #
 # @ description
 #creat list and filter ;preparation for EIC
@@ -20,7 +20,7 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 #,backend = "Ramp"
-FullLCreat <- function(DNalis=NULL,InL,MSn=1) {
+FullLCreatplus <- function(DNalis=NULL,InL,MSn=1) {
   require(mzR);
   if (missing(DNalis)) {DNalis<-list.files(getwd(),pattern="mzXML")} else {}
   mzOb<-list()
@@ -42,13 +42,14 @@ FullLCreat <- function(DNalis=NULL,InL,MSn=1) {
 
 
     LNaa<-list()
-    for (iii in 1:length(LNa)){nu<-c(1:length(LNa[[iii]]));LNaa[[iii]]<-data.frame(LNa[[iii]][,1],LNa[[iii]][,2],rtna$retentionTime[iii],nu)}
+    for (iii in 1:length(LNa)){nu<-c(1:nrow(LNa[[iii]]));LNaa[[iii]]<-data.frame(LNa[[iii]][,1],LNa[[iii]][,2],rtna$retentionTime[iii],nu)}
     LNa<-LNaa
     names(LNa)<-rtna$seqNum
-    ScNu<-as.numeric(length(LNa))
-    if (missing(InL)) {} else {
-      n=0;detL=0;oriL<-length(LNa);for (i in 1 : length(LNa)) {LNa[[i-detL]][,2][LNa[[i-detL]][,2]<InL]<-NA;detL<-oriL-length(LNa)}
-      n=0;detL=0;oriL<-length(LNa);for (i in 1 : length(LNa)) {LNa[[i-detL]]<-na.omit(LNa[[i-detL]]);detL<-oriL-length(LNa)}}
+    #ScNu<-as.numeric(length(LNa))
+    #if (missing(InL)) {} else {
+    #n=0;detL=0;oriL<-length(LNa);for (i in 1 : length(LNa)) {LNa[[i-detL]][,2][LNa[[i-detL]][,2]<InL]<-NA;detL<-oriL-length(LNa)}
+    #n=0;detL=0;oriL<-length(LNa);for (i in 1 : length(LNa)) {LNa[[i-detL]]<-na.omit(LNa[[i-detL]]);detL<-oriL-length(LNa)}
+    #}
     mzOb[[jj]]<-LNa
   }
   names(mzOb)<-DNalis

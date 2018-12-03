@@ -1,5 +1,5 @@
 # @title
-#LXIC
+#LXICpus
 #
 # @ description
 #XIC from LCreat Data
@@ -16,7 +16,7 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-RTlimited2 <- function(RAWlis,MZ,ppm=10,RTWin=3) {
+RTlimited2 <- function(RAWlis,MZ,ppm=10,RTWin=1) {
   require(reshape2)
   require(plyr)
   relist<-list()
@@ -94,22 +94,19 @@ RTlimited2 <- function(RAWlis,MZ,ppm=10,RTWin=3) {
       n=0;detL=0;oriL<-length(RDATA);for (i in 1 : oriL) {if (nrow(RDATA[[i-detL]])<1) {RDATA[[i-detL]]<-NULL;detL<-detL+1}}
       #filtering Finished
 
-
-
-
-
-
-
-
+      #if num of mz=2
       {if (length(unlist(strsplit(as.character(MZK$V1[1])[1],",")))==2){
+
         #spectrum list of mz1
         RDATA1<-llply(RDATA,function(x){x[,1][(x[,1]>MZMAX1|x[,1]<MZMIN1)]<-NA;return(x)})
         RDATA1<-llply(RDATA1,function(x){x<-na.omit(x);return(x)})
         n=0;detL=0;oriL<-length(RDATA1);for (i in 1 : oriL) {if (nrow(RDATA1[[i-detL]])<1) {RDATA1[[i-detL]]<-NULL;detL<-detL+1}}
-
         RDATA1<-ldply(RDATA1)
-
         colnames(RDATA1)<-c("ScN","mz","Intensity","RT","SpN")
+
+
+
+
         #spectrum list of mz2
         RDATA2<-llply(RDATA,function(x){x[,1][(x[,1]>MZMAX2|x[,1]<MZMIN2)]<-NA;return(x)})
         RDATA2<-llply(RDATA2,function(x){x<-na.omit(x);return(x)})
@@ -138,12 +135,12 @@ RTlimited2 <- function(RAWlis,MZ,ppm=10,RTWin=3) {
       RDATART<-llply(RDATART,function(x){x<-na.omit(x);return(x)})
       n=0;detL=0;oriL<-length(RDATART);for (i in 1 :length(RDATART)) {if (nrow(RDATART[[i-detL]])<1) {RDATART[[i-detL]]<-NULL;detL<-detL+1}}
 
-
-
       RDATART<-ldply(RDATART)
-
-
       colnames(RDATART)<-c("ScN","mz","Intensity","RT","SpN")
+      RDATA<-ldply(RDATA)
+      colnames(RDATA)<-c("ScN","mz","Intensity","RT","SpN")
+
+
       RDATART<-RDATART[-5]
       md<-melt(RDATART,id=c("ScN","mz","RT"))
       new<-dcast(md,ScN+mz+RT~variable,sum)
@@ -155,6 +152,30 @@ RTlimited2 <- function(RAWlis,MZ,ppm=10,RTWin=3) {
       Tolist[kk+(jk-1)*nrow(MZ),3]<-format(TopRDATA[1,4],scientific = TRUE,digits = 2)
 
       Tolist[kk+(jk-1)*nrow(MZ),4]<-names(RAWlis[jk])
+
+      #pic
+      wkwd<-getwd()
+      setwd(substring(names(RAWlis[jk]),1,nc-6))
+      mzst<-paste(paste((MZ[kk,]),collapse = ", "),"RT= ",round(TopRDATA[1,3],digits=1),seq="")
+      jpeg(file=paste(mzst,".jpeg",seq=""),width=1200,height=1000,res=56*2)
+      opar<-par(no.readonly = TRUE)
+      #par(mfrow=c(2,1))
+
+      #EIC picture
+
+      plot(RDATA$RT,(RDATA$Intensity/TopRDATA[1,4])*100, main=paste("EIC of ",mzst,"(MaxIntensity: ",format(TopRDATA[1,4],scientific = TRUE,digits = 2),")"),type="b",xlab = "Retention Time(min)",ylab = "Relative Intensity")
+      text(TopRDATA[1,3],45,paste("RT= ",round(TopRDATA[1,3],digits=1),seq=""),pos=2,offset=2)
+      text(TopRDATA[1,3],40,paste("Measured m/z= ",round(TopRDATA[1,2],digits = 4),seq=""),pos=2,offset=2)
+      {if (length(MZK)==2) {abline(v=RTMAX,col = "red");abline(v=RTMIN,col = "red")}}
+      abline(v=TopRDATA[1,3],col = "green")
+      #Full spectrum
+      #plot(RAWDATA[[paste(TopRDATA[1,4])]][,1],(RAWDATA[[paste(TopRDATA[1,4])]][,2]/TopRDATA[1,3])*100, main=paste("Spectrum of scan number",TopRDATA[1,4]," Spectrum number",TopRDATA[1,5],"(MaxIntensity: ",format(TopRDATA[1,3],scientific = TRUE,digits = 2),")"),type="h",xlab = "m/z",ylab = "Relative Intensity")
+
+      dev.off()
+      setwd(wkwd)
+
+
+
 
 
 
